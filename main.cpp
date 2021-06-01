@@ -8,8 +8,8 @@ void run(long long cycle) {
 }
 
 int main() {
-    long long cycle = 5e10;
-    long long core = 24;
+    long long cycle = 5e12;
+    long long core = 1;
 
     run(cycle);
 //    std::vector<std::thread> save;
