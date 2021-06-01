@@ -8,7 +8,7 @@ void run(long long cycle) {
 }
 
 int main() {
-    long long cycle = 1e10;
+    long long cycle = 5e10;
     long long core = 48;
 
     std::vector<std::thread> save;
