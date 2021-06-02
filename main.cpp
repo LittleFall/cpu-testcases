@@ -9,15 +9,14 @@ void run(long long cycle, int id) {
 }
 
 void write(long long cycle, int id) {
-    std::ofstream fout("a.out"+std::to_string(id));
-    while(cycle--) {
-        fout << "c" << std::endl;
-    }
+    getchar();
 }
 
 int main() {
+
+
     long long cycle = 5e12;
-    long long core = 1000;
+    long long core = 24;
 
     std::vector<std::thread> save;
 
