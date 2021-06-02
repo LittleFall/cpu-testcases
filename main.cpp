@@ -1,7 +1,7 @@
 #include <thread>
 #include <vector>
 #include <fstream>
-#include <ostream>
+#include <iostream>
 
 void run(long long cycle, int id) {
     while(cycle--) {
@@ -24,7 +24,7 @@ int main() {
     for(int i=0; i<core/2; ++i)
         save.emplace_back(run, cycle, i);
     for(int i=core/2; i<core; ++i)
-        save.emplace_back(run, cycle, i);
+        save.emplace_back(write, cycle, i);
 
     for(auto &th:save)
         th.join();
