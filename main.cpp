@@ -19,12 +19,17 @@ void write(long long cycle, int id) {
     }
 }
 
-int main() {
+int main(int argc, char **args) {
     using std::chrono::system_clock;
     std::time_t tt;
 
     long long cycle = 1e12;
-    long long core = 3800;
+    long long core = 24;
+
+    if (argc==2) {
+        core = std::atoi(args[1]);
+    }
+    std::cout << "threads = " << core << std::endl;
 
     std::vector<std::thread> save;
 
