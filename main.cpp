@@ -17,7 +17,7 @@ void write(long long cycle, int id) {
 
 int main() {
     long long cycle = 5e12;
-    long long core = 24;
+    long long core = 1000;
 
     std::vector<std::thread> save;
 
