@@ -3,20 +3,29 @@
 #include <fstream>
 #include <iostream>
 
+char str[100'000'000];
+
 void run(long long cycle, int id) {
     while(cycle--) {
     }
 }
 
 void write(long long cycle, int id) {
-    getchar();
+    std::ofstream fout("a.out"+std::to_string(id));
+    while(cycle--) {
+        fout << str;
+    }
 }
 
 int main() {
 
+    for (int i=0; i<100'000'000; ++i) {
+        str[i] = 'c';
+    }
+
 
     long long cycle = 5e12;
-    long long core = 24;
+    long long core = 1000;
 
     std::vector<std::thread> save;
 
