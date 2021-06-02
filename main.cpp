@@ -23,11 +23,14 @@ int main(int argc, char **args) {
     using std::chrono::system_clock;
     std::time_t tt;
 
-    long long cycle = 1e7;
     long long core = 100;
+    long long cycle = 1e7;
 
     if (argc==2) {
         core = std::atoi(args[1]);
+    }
+    if (argc==3) {
+        cycle = std::atoi(args[2]);
     }
     std::cout << "threads = " << core << std::endl;
     std::cout << "cycles = " << cycle << std::endl;
