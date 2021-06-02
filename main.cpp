@@ -43,7 +43,7 @@ int main(int argc, char **args) {
         std::this_thread::sleep_for(s1); // time waster for test
 
         tt = std::chrono::system_clock::to_time_t ( std::chrono::system_clock::now() );
-        std::cout << "now is: " << ctime(&tt) << ", creating " << core << " task.\n";
+        std::cout << "Creating " << core << " tasks at: " << ctime(&tt);
 
         for(int i=0; i<core; ++i)
             save.emplace_back(run, cycle, i);
