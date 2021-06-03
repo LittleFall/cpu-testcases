@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <unistd.h>
 
 char str[100'000'001];
 
@@ -10,10 +11,15 @@ void run(long long cycle, int id) {
     }
 }
 
+// TODO use posix interface to write
+// TODO fflush
+// read file
+// 读多个不同的文件，可以没有内容
+// 边读边算
 void write(long long cycle, int id) {
     std::ofstream fout("a.out"+std::to_string(id));
     while(cycle--) {
-        fout << str;
+        fout << str << std::endl;
     }
 }
 
