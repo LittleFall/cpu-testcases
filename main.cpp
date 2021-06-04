@@ -31,7 +31,7 @@ int main() {
 
 
     long long cycle = 5e12;
-    long long core = 1000;
+    long long core = 100;
 
     std::vector<std::thread> save;
 
