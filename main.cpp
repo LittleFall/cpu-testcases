@@ -4,7 +4,8 @@
 #include <iostream>
 #include <unistd.h>
 
-char str[100'000'001];
+constexpr int len = 10'000'001;
+char str[len];
 
 void run(long long cycle, int id) {
     while(cycle--) {
@@ -17,26 +18,27 @@ void run(long long cycle, int id) {
 // 读多个不同的文件，可以没有内容
 // 边读边算
 void write(long long cycle, int id) {
-    std::ofstream fout("a.out"+std::to_string(id));
-    while(cycle--) {
-        fout << str << std::endl;
-    }
+
 }
 
 int main() {
-
-    for (int i=0; i<100'000'000; ++i) {
+    for (int i=0; i<len-1; ++i) {
         str[i] = 'c';
     }
 
-
     long long cycle = 5e12;
-    long long core = 100;
+    long long core = 1000;
 
     std::vector<std::thread> save;
 
     for(int i=0; i<core; ++i)
-        save.emplace_back(write, cycle, i);
+        save.emplace_back([i=i]{
+            std::ofstream fout("a.out"+std::to_string(i));
+            long long cycle = 5e12;
+            while(cycle--) {
+                fout << str << std::endl;
+            }
+        });
 //    for(int i=core/2; i<core; ++i)
 //        save.emplace_back(write, cycle, i);
 
