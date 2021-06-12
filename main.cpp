@@ -1,47 +1,18 @@
-#include <thread>
-#include <vector>
-#include <fstream>
-#include <iostream>
 #include <unistd.h>
 
-constexpr int len = 10'000'001;
-char str[len];
+int main(int argc, char *argv[]) {
+    char buffer[64];
+    char error_message[] = "open file error\n";
+    char success_message[] = "open file success\n";
 
-void run(long long cycle, int id) {
-    while(cycle--) {
+    int fd = open("read", 0, 0);
+    if (fd == -1) {
+        write(0, error_message, strlen(error_message));
+        return -1;
     }
-}
+    write(0, success_message, strlen(success_message));
 
-// TODO use posix interface to write
-// TODO fflush
-// read file
-// 读多个不同的文件，可以没有内容
-// 边读边算
-void write(long long cycle, int id) {
-
-}
-
-int main() {
-    for (int i=0; i<len-1; ++i) {
-        str[i] = 'c';
-    }
-
-    long long cycle = 5e12;
-    long long core = 1000;
-
-    std::vector<std::thread> save;
-
-    for(int i=0; i<core; ++i)
-        save.emplace_back([i=i]{
-            std::ofstream fout("a.out"+std::to_string(i));
-            long long cycle = 5e12;
-            while(cycle--) {
-                fout << str << std::endl;
-            }
-        });
-//    for(int i=core/2; i<core; ++i)
-//        save.emplace_back(write, cycle, i);
-
-    for(auto &th:save)
-        th.join();
+    read(fd, buffer, 64);
+    close(fd);
+    return 0;
 }
