@@ -7,7 +7,7 @@
 #include <thread>
 #include <time.h>
 
-constexpr int len = 10'000'001;
+constexpr int len = 4097;
 char str[len];
 
 // TODO use posix interface to write
@@ -29,7 +29,7 @@ void myWrite(int id) {
 
     while (true) {
         int ret = write(fd, str, len - 1);
-        if (ret < 0) {
+        if (ret < len-1) {
             time(&t);
             sprintf(message, "[%s][%s]", ctime(&t), name);
             perror(message);
