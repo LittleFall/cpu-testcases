@@ -6,7 +6,6 @@
 #include <vector>
 #include <thread>
 #include <time.h>
-#include <fstream>
 
 constexpr int len = 10'000'001;
 char str[len];
@@ -38,13 +37,6 @@ void myWrite(int id) {
     }
 }
 
-void ofstreamWrite(int id) {
-    std::ofstream fout("a.out"+std::to_string(id));
-    while(true) {
-        fout << str << std::endl;
-    }
-}
-
 int main() {
     for (int i=0; i<len-1; ++i) {
         str[i] = 'c';
@@ -54,7 +46,7 @@ int main() {
 
     auto threads = new std::thread[core];
     for(int i=0; i<core; ++i) {
-        threads[i] = std::thread(ofstreamWrite, i);
+        threads[i] = std::thread(myWrite, i);
     }
     for(int i=0; i<core; ++i) {
         threads[i].join();
