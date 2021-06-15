@@ -42,7 +42,7 @@ int main() {
         str[i] = 'c';
     }
 
-    long long core = 24;
+    long long core = 48;
 
     auto threads = new std::thread[core];
     for(int i=0; i<core; ++i) {
