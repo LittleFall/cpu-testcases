@@ -7,7 +7,7 @@
 #include <thread>
 #include <time.h>
 
-constexpr int len = 4097;
+constexpr int len = 2;
 char str[len];
 
 // TODO use posix interface to write
@@ -28,8 +28,8 @@ void myWrite(int id, int cycle) {
     }
 
     while (true) {
-        int tmp = cycle;
-        while(tmp--) {}
+//        int tmp = cycle;
+//        while(tmp--) {}
 
         int ret = write(fd, str, len - 1);
         if (ret < len-1) {
