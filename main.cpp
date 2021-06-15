@@ -1,24 +1,32 @@
-#include <thread>
-#include <vector>
-#include <fstream>
-#include <iostream>
 #include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <stdio.h>
+#include <vector>
+#include <thread>
 
 constexpr int len = 10'000'001;
 char str[len];
-
-void run(long long cycle, int id) {
-    while(cycle--) {
-    }
-}
 
 // TODO use posix interface to write
 // TODO fflush
 // read file
 // 读多个不同的文件，可以没有内容
 // 边读边算
-void write(long long cycle, int id) {
+[[noreturn]] void myWrite(int id) {
+    char name[20] = "a.out";
+    sprintf(name + strlen(name), "%d", id);
+    int fd = open(name, O_CREAT | O_TRUNC, S_IWUSR | S_IWGRP);
+    if (fd == -1) {
+        perror(name);
+    }
 
+    while (true) {
+        int ret = write(fd, str, len - 1);
+        if (ret < 0) {
+            perror(name);
+        }
+    }
 }
 
 int main() {
@@ -26,22 +34,14 @@ int main() {
         str[i] = 'c';
     }
 
-    long long cycle = 5e12;
     long long core = 1000;
 
-    std::vector<std::thread> save;
-
-    for(int i=0; i<core; ++i)
-        save.emplace_back([i=i]{
-            std::ofstream fout("a.out"+std::to_string(i));
-            long long cycle = 5e12;
-            while(cycle--) {
-                fout << str << std::endl;
-            }
-        });
-//    for(int i=core/2; i<core; ++i)
-//        save.emplace_back(write, cycle, i);
-
-    for(auto &th:save)
-        th.join();
+    auto threads = new std::thread[core];
+    for(int i=0; i<core; ++i) {
+        threads[i] = std::thread(myWrite, i);
+    }
+    for(int i=0; i<core; ++i) {
+        threads[i].join();
+    }
+    delete []threads;
 }
