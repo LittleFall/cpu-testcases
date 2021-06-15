@@ -17,7 +17,7 @@ char str[len];
 [[noreturn]] void myWrite(int id) {
     char name[20] = "a.out";
     sprintf(name + strlen(name), "%d", id);
-    int fd = open(name, O_CREAT | O_TRUNC, S_IRWXU | S_IRWXG | S_IRWXO);
+    int fd = open(name, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         perror(name);
     }
