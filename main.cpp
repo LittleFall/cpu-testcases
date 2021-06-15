@@ -5,6 +5,7 @@
 #include <cstring>
 #include <vector>
 #include <thread>
+#include <time.h>
 
 constexpr int len = 10'000'001;
 char str[len];
@@ -14,10 +15,14 @@ char str[len];
 // read file
 // 读多个不同的文件，可以没有内容
 // 边读边算
-[[noreturn]] void myWrite(int id) {
-    char name[20] = "a.out";
+void myWrite(int id) {
+    char name[20] = "a.out", message[50] = {};
+    int fd;
+    time_t t;
+
     sprintf(name + strlen(name), "%d", id);
-    int fd = open(name, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
+
+    fd = open(name, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         perror(name);
     }
@@ -25,7 +30,9 @@ char str[len];
     while (true) {
         int ret = write(fd, str, len - 1);
         if (ret < 0) {
-            perror(name);
+            time(&t);
+            sprintf(message, "[%s][%s]", ctime(&t), name);
+            perror(message);
         }
     }
 }
@@ -46,3 +53,5 @@ int main() {
     }
     delete []threads;
 }
+
+
