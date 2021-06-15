@@ -15,7 +15,7 @@ char str[len];
 // read file
 // 读多个不同的文件，可以没有内容
 // 边读边算
-void myWrite(int id) {
+void myWrite(int id, int cycle) {
     char name[20] = "a.out", message[50] = {};
     int fd;
     time_t t;
@@ -28,6 +28,9 @@ void myWrite(int id) {
     }
 
     while (true) {
+        int tmp = cycle;
+        while(tmp--) {}
+
         int ret = write(fd, str, len - 1);
         if (ret < len-1) {
             time(&t);
@@ -42,11 +45,11 @@ int main() {
         str[i] = 'c';
     }
 
-    long long core = 48;
+    long long core = 48, cycle = 1'000'000;
 
     auto threads = new std::thread[core];
     for(int i=0; i<core; ++i) {
-        threads[i] = std::thread(myWrite, i);
+        threads[i] = std::thread(myWrite, i, cycle);
     }
     for(int i=0; i<core; ++i) {
         threads[i].join();
