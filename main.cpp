@@ -22,12 +22,12 @@ char str[len];
         perror(name);
     }
 
-    while (true) {
-        int ret = write(fd, str, len - 1);
-        if (ret < 0) {
-            perror(name);
-        }
-    }
+//    while (true) {
+//        int ret = write(fd, str, len - 1);
+//        if (ret < 0) {
+//            perror(name);
+//        }
+//    }
 }
 
 int main() {
