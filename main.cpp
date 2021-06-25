@@ -7,51 +7,55 @@
 #include <thread>
 #include <time.h>
 
-constexpr int len = 2;
-char str[len];
+char buf[1'048'57600+8192]={1};
 
-// TODO use posix interface to write
-// TODO fflush
-// read file
-// 读多个不同的文件，可以没有内容
-// 边读边算
-void myWrite(int id, int cycle) {
-    char name[20] = "a.out", message[50] = {};
+void myRead(int id, char filename[200], int block_size) {
+    char message[200] = {};
     int fd;
-    time_t t;
-
-    sprintf(name + strlen(name), "%d", id);
-
-    fd = open(name, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
-    if (fd == -1) {
-        perror(name);
-    }
-
+    time_t t = 0, lstt = 0;
+    
     while (true) {
-//        int tmp = cycle;
-//        while(tmp--) {}
-
-        int ret = write(fd, str, len - 1);
-        if (ret < len-1) {
-            time(&t);
-            sprintf(message, "[%s][%s]", ctime(&t), name);
-            perror(message);
+        fd = open(filename, O_DIRECT | O_RDONLY);
+        if (fd == -1) {
+            perror(filename);
+            return;
         }
+        int ret = read(fd, (char*)((uintptr_t(buf)>>12)+1 << 12), block_size);
+        if (ret<block_size) {
+            time(&t);
+            sprintf(message, "[thread=%d][time: %lld][%s] %d byte has been read, cost %d seconds.", id, t, filename, ret, t-lstt);
+            perror(message);
+            lstt = t;
+        }
+        close(fd);
     }
 }
 
-int main() {
-    for (int i=0; i<len-1; ++i) {
-        str[i] = 'c';
+int main(int argc, char *argv[]) {
+    int num_thread = 1000, block_size = 1'048'57600;
+    char filepath[200] = {};
+    
+    if (argc>=2) {
+        num_thread  = atoi(argv[1]);
     }
-
-    long long core = 24, cycle = 1'000'000;
-
-    auto threads = new std::thread[core];
-    for(int i=0; i<core; ++i) {
-        threads[i] = std::thread(myWrite, i, cycle);
+    if (argc>=3) {
+        block_size = atoi(argv[2]);
     }
-    for(int i=0; i<core; ++i) {
+    if (argc>=4) {
+        strcpy(filepath, argv[3]);
+    } else {
+        strcpy(filepath, argv[0]);
+    }
+    
+    printf("Multithread reading test.\n");
+    printf("Number of threads = %d, try read size = %d\n", num_thread, block_size);
+    printf("Reading file: `%s`.\n", filepath);
+
+    auto threads = new std::thread[num_thread];
+    for(int i=0; i<num_thread; ++i) {
+        threads[i] = std::thread(myRead, i, filepath, block_size);
+    }
+    for(int i=0; i<num_thread; ++i) {
         threads[i].join();
     }
     delete []threads;
