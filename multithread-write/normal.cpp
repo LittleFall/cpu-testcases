@@ -17,7 +17,7 @@ void myWrite(int id, char dir[200], int block_size) {
     
     sprintf(filename, "%s/a.out_%d", dir, id);
 
-    fd = open(filename, O_CREAT | O_RDWR | O_APPEND | O_SYNC, S_IRUSR | S_IWUSR);
+    fd = open(filename, O_CREAT | O_RDWR | O_APPEND, S_IRUSR | S_IWUSR);
     if (fd == -1) {
         perror(filename);
         return;
